@@ -18,7 +18,8 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="InviteMe - Team Testing Environment">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -29,10 +30,325 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>inviteme</title>
+  <title>InviteMe - Team Access</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-container {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      font-weight: bold;
+    }
+
+    h1 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      color: #718096;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.875rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      background: #f8fafc;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 0.875rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 1rem;
+    }
+
+    .login-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .login-button:active {
+      transform: translateY(0);
+    }
+
+    .error-message {
+      color: #e53e3e;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: #fed7d7;
+      border-radius: 6px;
+      border-left: 4px solid #e53e3e;
+      display: none;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 1rem;
+      color: #718096;
+      font-size: 0.875rem;
+    }
+
+    .loading::after {
+      content: '';
+      animation: dots 1.5s infinite;
+    }
+
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60%, 100% { content: '...'; }
+    }
+
+    /* Hide Flutter app initially */
+    #flutter-app {
+      display: none;
+    }
+
+    /* Show loading state when Flutter is loading */
+    .flutter-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: white;
+      flex-direction: column;
+    }
+
+    .flutter-loading h2 {
+      margin-top: 1rem;
+      color: #4a5568;
+      font-weight: 400;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e2e8f0;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+  <!-- Authentication Wall -->
+  <div id="auth-wall" class="auth-container">
+    <div class="logo">🎉</div>
+    <h1>InviteMe</h1>
+    <p class="subtitle">Team Testing Environment</p>
+    
+    <form id="auth-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required autocomplete="username">
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
+      </div>
+      
+      <button type="submit" class="login-button">Access App</button>
+      
+      <div id="error-message" class="error-message"></div>
+      <div id="loading" class="loading">Authenticating</div>
+    </form>
+  </div>
+
+  <!-- Flutter App Container -->
+  <div id="flutter-app">
+    <div id="flutter-loading" class="flutter-loading">
+      <div class="spinner"></div>
+      <h2>Loading InviteMe...</h2>
+    </div>
+  </div>
+
+  <script>
+    // Configuration - Change these credentials as needed
+    const AUTH_CONFIG = {
+      username: 'teamtest',
+      password: 'inviteme2024!',
+      sessionDuration: 24 * 60 * 60 * 1000 // 24 hours in milliseconds
+    };
+
+    // Check if already authenticated
+    function checkAuth() {
+      const session = localStorage.getItem('inviteme_auth_session');
+      if (session) {
+        try {
+          const sessionData = JSON.parse(session);
+          const now = new Date().getTime();
+          
+          if (sessionData.expires > now) {
+            // Still valid session
+            loadFlutterApp();
+            return true;
+          } else {
+            // Session expired
+            localStorage.removeItem('inviteme_auth_session');
+          }
+        } catch (e) {
+          localStorage.removeItem('inviteme_auth_session');
+        }
+      }
+      return false;
+    }
+
+    // Handle form submission
+    document.getElementById('auth-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('error-message');
+      const loadingDiv = document.getElementById('loading');
+      
+      // Clear previous errors
+      errorDiv.style.display = 'none';
+      loadingDiv.style.display = 'block';
+      
+      // Simulate authentication delay
+      setTimeout(() => {
+        if (username === AUTH_CONFIG.username && password === AUTH_CONFIG.password) {
+          // Successful authentication
+          const sessionData = {
+            authenticated: true,
+            expires: new Date().getTime() + AUTH_CONFIG.sessionDuration,
+            username: username
+          };
+          
+          localStorage.setItem('inviteme_auth_session', JSON.stringify(sessionData));
+          loadFlutterApp();
+        } else {
+          // Authentication failed
+          loadingDiv.style.display = 'none';
+          errorDiv.textContent = 'Invalid username or password. Please try again.';
+          errorDiv.style.display = 'block';
+          
+          // Clear password field
+          document.getElementById('password').value = '';
+          document.getElementById('password').focus();
+        }
+      }, 800);
+    });
+
+    // Load Flutter app
+    function loadFlutterApp() {
+      document.getElementById('auth-wall').style.display = 'none';
+      document.getElementById('flutter-app').style.display = 'block';
+      
+      // Load Flutter bootstrap
+      const script = document.createElement('script');
+      script.src = 'flutter_bootstrap.js';
+      script.async = true;
+      
+      script.onload = function() {
+        // Hide loading screen once Flutter loads
+        setTimeout(() => {
+          const loadingElement = document.getElementById('flutter-loading');
+          if (loadingElement) {
+            loadingElement.style.display = 'none';
+          }
+        }, 2000);
+      };
+      
+      document.body.appendChild(script);
+    }
+
+    // Add logout function (accessible from console for debugging)
+    window.logout = function() {
+      localStorage.removeItem('inviteme_auth_session');
+      location.reload();
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!checkAuth()) {
+        // Focus on username field if not authenticated
+        document.getElementById('username').focus();
+      }
+    });
+
+    // Handle enter key on form inputs
+    document.getElementById('username').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('password').focus();
+      }
+    });
+  </script>
 </body>
 </html>
